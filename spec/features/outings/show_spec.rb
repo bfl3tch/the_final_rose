@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'The bachelorette contestants show page' do
+RSpec.describe 'The outing show page' do
   before(:each) do
     @bachelorette = Bachelorette.create!(name: 'Original', season_number: 1, description: 'The first one!')
 
@@ -32,24 +32,36 @@ RSpec.describe 'The bachelorette contestants show page' do
     @event11 = Event.create(outing: @outing3, contestant: @contestant4)
     @event12 = Event.create(outing: @outing4, contestant: @contestant4)
 
-    visit "/bachelorettes/#{@bachelorette.id}/contestants/#{@contestant1.id}"
+    visit outing_path(@outing1)
+  end
+#   User Story 4 of 6
+# As a visitor,
+# When I visit an outings show pages,
+# I see that outings name, location, and date
+# And I see a total count of contestants that were on this outing
+# And I see a list of all names of the contestants that went on this outing
+#
+# (e.g.       Helicopter Ride
+#             Location: Bali
+#             Date: 09/12/19
+#           Count of Contestants: 3
+# Contestants: JoJo Fletcher, Kaitlyn Bristowe, Hannah Brown)
+
+  it 'displays the outing name, location, and date' do
+    expect(page).to have_content(@outing1.name)
+    expect(page).to have_content(@outing1.location)
+    expect(page).to have_content(@outing1.date)
   end
 
-  it 'displays the contestant name, season number and description of the bachelorette' do
-    expect(page).to have_content(@bachelorette.season_number)
-    expect(page).to have_content(@bachelorette.description)
+  it 'displays a count of how many contestants attended the outing' do
+    expect(page).to have_content("Number of contestants: #{@outing1.contestants.count}")
   end
 
-  it 'displays all contestant outings as links to outing show page' do
-    expect(page).to have_link(@outing1.name)
-    expect(page).to have_link(@outing2.name)
-    expect(page).to have_link(@outing3.name)
-    expect(page).to_not have_link(@outing4.name)
+  it 'displays the name of every contestant that attended the outing' do
+    expect(page).to have_content(@contestant1.name)
+    expect(page).to have_content(@contestant2.name)
+    expect(page).to have_content(@contestant3.name)
+    expect(page).to_not have_content(@contestant4.name)
   end
 
-  it 'actually redirects you upon clicking that link' do
-    click_link("#{@outing1.name}")
-
-    expect(current_path).to eq(outing_path(@outing1))
-  end
 end
