@@ -56,5 +56,9 @@ RSpec.describe 'The bachelorette show page' do
     expect(page).to have_content(@contestant8.name)
   end
 
-
+  it 'displays the average age of the contestants' do
+    expected = ((21+22+23+24+25+26+27+28)/8.0)
+    expect(page).to have_content("Average Age of Contestants: #{expected}")
+    save_and_open_page
+  end
 end
