@@ -12,6 +12,8 @@ RSpec.describe 'The bachelorette show page' do
     @contestant6 = @bachelorette.contestants.create!(name: 'k l', age: 26, hometown: 'atlanta')
     @contestant7 = @bachelorette.contestants.create!(name: 'm n', age: 27, hometown: 'jacksonville')
     @contestant8 = @bachelorette.contestants.create!(name: 'o p', age: 28, hometown: 'miami')
+
+    visit "/bachelorettes/#{@bachelorette.id}"
   end
 
 #   User Story 1 of 6
@@ -34,8 +36,24 @@ RSpec.describe 'The bachelorette show page' do
   it 'displays the bachelorettes name, season number, and season description' do
     expect(page).to have_content(@bachelorette.name)
     expect(page).to have_content(@bachelorette.season_number)
-    expect(page).to have_content(@bachelorette.des)
+    expect(page).to have_content(@bachelorette.description)
   end
-  it 'displays a link to the bachelorettes contestants'
-  it 'links over to a new page which only shows that bachelorettes contestants'
+
+  it 'displays a link to the bachelorettes contestants' do
+    expect(page).to have_link('Contestants')
+  end
+
+  it 'links over to a new page which only shows that bachelorettes contestants' do
+    click_link('Contestants')
+    save_and_open_page
+    expect(current_path).to eq(bachelorette_contestants_path(@bachelorette.id))
+    expect(page).to have_content(@contestant1.name)
+    expect(page).to have_content(@contestant2.name)
+    expect(page).to have_content(@contestant3.name)
+    expect(page).to have_content(@contestant4.name)
+    expect(page).to have_content(@contestant5.name)
+    expect(page).to have_content(@contestant6.name)
+    expect(page).to have_content(@contestant7.name)
+    expect(page).to have_content(@contestant8.name)
+  end
 end
