@@ -12,7 +12,7 @@ RSpec.describe Bachelorette, type: :model do
       @contestant1 = @bachelorette.contestants.create!(name: 'a b', age: 21, hometown: 'hollywood')
       @contestant2 = @bachelorette.contestants.create!(name: 'c d', age: 22, hometown: 'memphis')
       @contestant3 = @bachelorette.contestants.create!(name: 'e f', age: 23, hometown: 'portland')
-      @contestant4 = @bachelorette.contestants.create!(name: 'g h', age: 24, hometown: 'seattle')
+      @contestant4 = @bachelorette.contestants.create!(name: 'g h', age: 24, hometown: 'hollywood')
       @contestant5 = @bachelorette.contestants.create!(name: 'i j', age: 25, hometown: 'boise')
       @contestant6 = @bachelorette.contestants.create!(name: 'k l', age: 26, hometown: 'atlanta')
       @contestant7 = @bachelorette.contestants.create!(name: 'm n', age: 27, hometown: 'jacksonville')
@@ -43,6 +43,18 @@ RSpec.describe Bachelorette, type: :model do
         expected = ((21+22+23+24+25+26+27+28)/8.0)
 
         expect(@bachelorette.average_age).to eq(expected)
+      end
+    end
+
+    describe '#hometown_list' do
+      it 'displays a list of all the hometowns uniquely' do
+        list = [@contestant1.hometown, @contestant2.hometown,
+          @contestant3.hometown,@contestant4.hometown,@contestant5.hometown,
+          @contestant6.hometown,@contestant7.hometown,@contestant8.hometown]
+        expected = list.uniq
+
+        expect(@bachelorette.hometown_list).to eq(expected)
+
       end
     end
   end
