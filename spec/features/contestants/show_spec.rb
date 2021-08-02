@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'The bachelorette contestants how page' do
+RSpec.describe 'The bachelorette contestants index page' do
   before(:each) do
     @bachelorette = Bachelorette.create!(name: 'Original', season_number: 1, description: 'The first one!')
 
@@ -13,41 +13,43 @@ RSpec.describe 'The bachelorette contestants how page' do
     @contestant7 = @bachelorette.contestants.create!(name: 'm n', age: 27, hometown: 'jacksonville')
     @contestant8 = @bachelorette.contestants.create!(name: 'o p', age: 28, hometown: 'miami')
 
-    visit "/bachelorettes/#{@bachelorette.id}/contestants"
+    @outing1 = Outing.create!(name: 'party1', location: 'jungle', date: '04/12/2009')
+    @outing2 = Outing.create!(name: 'party2', location: 'mountain', date: '05/12/2009')
+    @outing3 = Outing.create!(name: 'party3', location: 'beach', date: '06/12/2009')
+    @outing4 = Outing.create!(name: 'party4', location: 'river', date: '07/12/2009')
+
+    @event1 = Event.create(outing: @outing1, contestant: @contestant1)
+    @event2 = Event.create(outing: @outing2, contestant: @contestant1)
+    @event3 = Event.create(outing: @outing3, contestant: @contestant1)
+
+    @event5 = Event.create(outing: @outing1, contestant: @contestant2)
+    @event6 = Event.create(outing: @outing2, contestant: @contestant2)
+    @event7 = Event.create(outing: @outing3, contestant: @contestant2)
+    @event8 = Event.create(outing: @outing4, contestant: @contestant2)
+
+    @event9 = Event.create(outing: @outing1, contestant: @contestant3)
+    @event10 = Event.create(outing: @outing2, contestant: @contestant3)
+    @event11 = Event.create(outing: @outing3, contestant: @contestant4)
+    @event12 = Event.create(outing: @outing4, contestant: @contestant4)
+
+    visit "/bachelorettes/#{@bachelorette.id}/contestants/#{@contestant1.id}"
   end
 
-  it 'displays the names of all of the contestants' do
-    expect(page).to have_content(@contestant1.name)
-    expect(page).to have_content(@contestant2.name)
-    expect(page).to have_content(@contestant3.name)
-    expect(page).to have_content(@contestant4.name)
-    expect(page).to have_content(@contestant5.name)
-    expect(page).to have_content(@contestant6.name)
-    expect(page).to have_content(@contestant7.name)
-    expect(page).to have_content(@contestant8.name)
-  end
-#
-#   -Age
-# -Hometown
-# (e.g. "Name: Pilot Pete, Age: 34, Hometown: Irving, TX")
-# And I can click on any contestants name (as a link) to go to that contestants show page "/contestants/:id"
-  it 'displays the attributes of those contestants' do
-    expect(page).to have_content(@contestant1.age)
-    expect(page).to have_content(@contestant2.age)
-    expect(page).to have_content(@contestant3.age)
-    expect(page).to have_content(@contestant4.age)
-    expect(page).to have_content(@contestant5.hometown)
-    expect(page).to have_content(@contestant6.hometown)
-    expect(page).to have_content(@contestant7.hometown)
-    expect(page).to have_content(@contestant8.hometown)
-  end
-  it 'has each name as a link to that contestants show page' do
-      expect(page).to have_link("#{@contestant1.name}")
+  it 'displays the contestant name, season number and description of the bachelorette' do
+    expect(page).to have_content(@bachelorette.season_number)
+    expect(page).to have_content(@bachelorette.description)
   end
 
-  it 'redirects you to the contestants show page after clicking that link' do
-    click_link("#{@contestant1.name}")
+  it 'displays all contestant outings as links to outing show page' do
+    expect(page).to have_link(@outing1.name)
+    expect(page).to have_link(@outing2.name)
+    expect(page).to have_link(@outing3.name)
+    expect(page).to_not have_link(@outing4.name)
+  end
 
-    expect(current_path).to eq(contestant_path(@contestant1))
+  it 'actually redirects you upon clicking that link' do
+    click_link("#{@outing1.name}")
+
+    expect(current_path).to eq(outing_path(@outing1))
   end
 end

@@ -1,5 +1,5 @@
-<% @contestants.each_with_index do |contestant, idx| %>
-  <%= link_to "#{contestant.name}", contestant_path(contestant) %></p>
+<% @bachelorette.contestants.each do |contestant| %>
+  <%= link_to "#{contestant.name}", bachelorette_contestant_path(@bachelorette, contestant) %></p>
   <p><%= contestant.age %></p>
   <p><%= contestant.hometown %></p>
 <% end %>
